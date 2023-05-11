@@ -1,1 +1,1 @@
-# NextJS-With-TypeScript-Portfolio
+# NextJS-With-TypeScript-Course
