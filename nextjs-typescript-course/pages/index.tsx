@@ -1,8 +1,11 @@
 import { NewsArticle, NewsResponse } from '@/models/NewsArticles'
 import Head from 'next/head'
+import { Alert } from 'react-bootstrap'
 
 // this is a typescript type from nextJS that is built-in
 import { GetServerSideProps } from 'next'
+import NewsArticleEntry from '@/components/NewsArticleEntry'
+import NewsArticlesGrid from '@/components/NewsArticlesGrid'
 
 
 
@@ -17,6 +20,7 @@ interface BreakingNewsPageProps {
 // this will fetch the data from the api, which mimicks fetching data from our backend (which is also an API most of the time)
 // we usually do api/backend calls in useEffect() but in NextJS we use getServerSideProps
 // this won't be executed on the client, it will be executed on the server
+// getServerSideProps only works in pages folder
 export const getServerSideProps: GetServerSideProps<BreakingNewsPageProps> = async () => {
   // we get back the api response
   const response = await fetch("https://newsapi.org/v2/top-headlines?country=us&apiKey=" + process.env.NEWS_API_KEY)
@@ -34,7 +38,9 @@ export const getServerSideProps: GetServerSideProps<BreakingNewsPageProps> = asy
 
 
 
-// you then write the interface name like this and destructure the props you want
+
+// what you're doing here is, whenever this component is rendered, you have access to the props returned by the BreakingNewsPageProps function, this function asynchronously fetches the data from the api, and you have access to that data in the component
+// this is how you fetch data using nextJS with typescript
 export default function BreakingNewsPage({ newsArticles }: BreakingNewsPageProps) {
 
   return (
@@ -45,6 +51,13 @@ export default function BreakingNewsPage({ newsArticles }: BreakingNewsPageProps
 
       <main>
         <h1>Breaking News</h1>
+
+        <Alert>
+          This page uses getServerSideProps to fetch data on the server and display it to search engine crawlers before the page is loaded on the client. This improves SEO.
+        </Alert>
+
+        {/* this will invoke the BreakingNewsPageProps function to render newsArticles */}
+        <NewsArticlesGrid articles={newsArticles}/>
       </main>
     </>
   )
