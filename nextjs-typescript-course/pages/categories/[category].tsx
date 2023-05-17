@@ -3,6 +3,11 @@ import { NewsArticle, NewsResponse } from "@/models/NewsArticles"
 
 // this is the built-in type we get from nextJS
 import { GetStaticPaths, GetStaticProps } from "next"
+import Head from "next/head"
+import { useRouter } from "next/router"
+import { Alert } from 'react-bootstrap'
+
+
 
 // you need to define an interface for all props you're going to use in this functional component
 interface CategoryNewsPageProps {
@@ -50,9 +55,23 @@ export const getStaticProps: GetStaticProps<CategoryNewsPageProps> = async conte
 
 export default function CategoryNewsPage({ newsArticles }: CategoryNewsPageProps) {
 
+  // can use useRouter for navigation but also to get route params 
+  const router = useRouter()
+  const categoryName = router.query.category?.toString()
+
   return (
     <>
+      <Head>
+        <title key="title">Category - {categoryName}</title>
+      </Head>
+
       <main>
+        <h1>Category - {categoryName}</h1>
+
+        <Alert>
+          This page uses getStaticProps which gets the data from the news API at compile time. This page also uses incremental static regeneration to show data not older than 5 minutes
+        </Alert>
+
         <NewsArticlesGrid articles={newsArticles} />
       </main>
     </>
